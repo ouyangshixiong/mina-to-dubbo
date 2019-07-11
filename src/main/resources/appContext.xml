@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
     http://www.springframework.org/schema/context
@@ -14,8 +15,6 @@
             </map>
         </property>
     </bean>
-
-    <bean id="testHandler" class="com.example.TestHandler" />
 
     <bean id="protocolFilter" class="org.apache.mina.filter.codec.ProtocolCodecFilter">
         <constructor-arg>
@@ -34,11 +33,26 @@
         </property>
     </bean>
 
-    <bean id="tcpAcceptor" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor" init-method="bind" destroy-method="unbind">
+    <bean id="dispatcher" class="com.example.Dispatcher" />
+
+    <bean id="businessHandler" factory-bean="tcpAcceptor" factory-method="getHandler">
+        <property name="handlerMapping">
+            <map>
+                <entry key="demo-msgdto" value-ref="demoMsgDtoHandler" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="demoMsgDtoHandler" class="com.example.handler.DemoMsgDtoHandler"/>
+
+    <bean id="tcpAcceptor" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor" init-method="bind"
+          destroy-method="unbind">
         <property name="defaultLocalAddress" value=":7000" />
-        <property name="handler" ref="testHandler" />
+        <property name="handler" ref="dispatcher" />
         <property name="reuseAddress" value="true" />
         <property name="filterChainBuilder" ref="filterChainBuilder" />
     </bean>
+
+    <context:component-scan base-package="com.example.service"></context:component-scan>
 
 </beans>
