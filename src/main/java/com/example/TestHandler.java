@@ -13,6 +13,9 @@ public class TestHandler extends AbstractMinaHandler {
     @Override
     public void messageReceived(IoSession session, Object message) throws Exception {
         DemoMsgDto msgDto = (DemoMsgDto) message;
-        log.info("msgDto" + msgDto.getDemoMsg());
+        log.info("server received message=" + msgDto.getDemoMsg());
+        DemoMsgDto respMsgDto = new DemoMsgDto();
+        respMsgDto.setDemoMsg("server say hello");
+        session.write(respMsgDto);
     }
 }
