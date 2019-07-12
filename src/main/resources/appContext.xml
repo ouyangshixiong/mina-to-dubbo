@@ -7,6 +7,8 @@
     http://www.springframework.org/schema/context
     http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
+    <context:property-placeholder location="cmd.properties"/>
+
     <!-- not important bean -->
     <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
         <property name="customEditors">
@@ -38,12 +40,14 @@
     <bean id="businessHandler" factory-bean="tcpAcceptor" factory-method="getHandler">
         <property name="handlerMapping">
             <map>
-                <entry key="demo-msgdto" value-ref="demoMsgDtoHandler" />
+                <entry key="${cmd.msgdto}" value-ref="demoMsgDtoHandler" />
+                <entry key="${cmd.text}" value-ref="textMsgHandler" />
             </map>
         </property>
     </bean>
 
     <bean id="demoMsgDtoHandler" class="com.example.handler.DemoMsgDtoHandler"/>
+    <bean id="textMsgHandler" class="com.example.handler.TextMsgHandler" />
 
     <bean id="tcpAcceptor" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor" init-method="bind"
           destroy-method="unbind">

@@ -7,21 +7,18 @@ import org.apache.mina.core.session.IoSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-public class DemoMsgDtoHandler implements IMsgHandler{
-
-    @Value("${cmd.msgdto}")
-    private String CMD;
+public class TextMsgHandler implements IMsgHandler{
 
     @Autowired
     DemoService demoService;
 
-    public void process(IoSession session, Object message) {
-        DemoMsgDto msgDto = (DemoMsgDto) message;
-        DemoMsgDto respMsgDto = new DemoMsgDto();
+    @Value("${cmd.text}")
+    private String CMD;
+
+    public void process(IoSession session, Object o) {
         ProtocolWrapper protocolWrapper = new ProtocolWrapper();
         protocolWrapper.setCMD(CMD);
-        respMsgDto.setDemoMsg(demoService.readMsgFromDb(msgDto.getDemoMsg()));
-        protocolWrapper.setT(respMsgDto);
+        protocolWrapper.setT(demoService.readMsgFromDb( (String)o ));
         session.write(protocolWrapper);
     }
 }
