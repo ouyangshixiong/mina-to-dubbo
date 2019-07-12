@@ -4,8 +4,8 @@
 
 - 去除所有shell脚本，为Cloud Native做准备
 - 原模块独立出来作为Application，为微服务做基础准备
-  - [x] One jar 发布
-  - [x] 独立的Application
+  - [x] **One jar 发布**
+  - [x] **独立的Application**
 
 
 ## 验证原设计的fatal缺陷
