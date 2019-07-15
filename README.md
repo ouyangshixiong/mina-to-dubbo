@@ -6,6 +6,8 @@
 - 原模块独立出来作为Application，为微服务做基础准备
   - [x] **One jar 发布**
   - [x] **独立的Application**
+  - [x] **支持命令字CMD配置**
+  - [x] **支持Mina同步模式发送**
 
 
 ## 验证原设计的fatal缺陷
@@ -13,8 +15,8 @@
 - [ ] Executor、Runnable是否真的有助提升性能？
 - [ ] 验证模块间mina异步方式是否真的有助提升性能？
 - [ ] 验证模块间mina改为同步调用可行性？
+- [ ] 验证使用ExecutorFilter和不使用ExecutorFilter在高并发下的性能差别
 - [ ] 验证原代码中四个自定义池（mina连接池）可行性？（mina自带ioprocessor池）
-
 
 ## 演示二方库、三方库的最佳实践
 

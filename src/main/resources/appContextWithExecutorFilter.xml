@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+    <context:property-placeholder location="cmd.properties"/>
+
+    <!-- not important bean -->
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
+            <map>
+                <entry key="java.net.SocketAddress" value="org.apache.mina.integration.beans.InetSocketAddressEditor"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- mina内置线程池,默认最大16个 -->
+    <bean id="executorFilter" class="org.apache.mina.filter.executor.ExecutorFilter"/>
+
+    <bean id="protocolFilter" class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+        <constructor-arg>
+            <bean class="org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory"></bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="loggerFilter" class="org.apache.mina.filter.logging.LoggingFilter"></bean>
+
+    <bean id="filterChainBuilder" class="org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder">
+        <property name="filters">
+            <map>
+                <entry key="executor" value-ref="executorFilter"/>
+                <entry key="loggerFilter" value-ref="loggerFilter" />
+                <entry key="protocolFilter" value-ref="protocolFilter" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="dispatcher" class="com.example.Dispatcher" />
+
+    <bean id="businessHandler" factory-bean="tcpAcceptor" factory-method="getHandler">
+        <property name="handlerMapping">
+            <map>
+                <entry key="${cmd.msgdto}" value-ref="demoMsgDtoHandler" />
+                <entry key="${cmd.text}" value-ref="textMsgHandler" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="demoMsgDtoHandler" class="com.example.handler.DemoMsgDtoHandler"/>
+    <bean id="textMsgHandler" class="com.example.handler.TextMsgHandler" />
+
+    <bean id="tcpAcceptor" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor" init-method="bind"
+          destroy-method="unbind">
+        <property name="defaultLocalAddress" value=":7000" />
+        <property name="handler" ref="dispatcher" />
+        <property name="reuseAddress" value="true" />
+        <property name="filterChainBuilder" ref="filterChainBuilder" />
+    </bean>
+
+    <context:component-scan base-package="com.example.service"></context:component-scan>
+
+</beans>

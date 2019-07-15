@@ -11,7 +11,9 @@ public class StartUp {
     public static void main(String[] args) throws Exception
     {
         log.info("*************** Demo Server is starting ...***************");
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
+//        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContext.xml");
+        //带mina自建ExecutorFilter的配置
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("appContextWithExecutorFilter.xml");
         log.info("*************** Demo Server start up successfully!***************");
     }
 }
