@@ -8,7 +8,10 @@
   - [x] **独立的Application**
   - [x] **支持命令字CMD配置**
   - [x] **支持Mina同步模式发送**
-
+  - [ ] **branch_dubbo兼容dubbo**
+  - [ ] **branch_dubbo验证基于dubbo的service call**
+  - [ ] **branch_springboot兼容springboot**
+  - [ ] **branch_springboot验证基于http的service call**
 
 ## 验证原设计的fatal缺陷
 
